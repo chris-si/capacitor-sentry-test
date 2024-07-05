@@ -1,0 +1,7 @@
+{
+  "name": "capacitor-sentry-test",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
