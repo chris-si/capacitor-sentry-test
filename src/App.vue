@@ -10,6 +10,6 @@ import { onMounted } from "vue";
 
 onMounted(() => {
   console.log("App mounted");
-  throw new Error("Test error");
+  // throw new Error("Test error");
 });
 </script>

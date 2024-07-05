@@ -34,7 +34,7 @@ import "@ionic/vue/css/palettes/dark.system.css";
 /* Theme variables */
 import "./theme/variables.css";
 
-import * as Sentry from "@sentry/vue";
+import * as Sentry from "@sentry/capacitor";
 import * as SentryVue from "@sentry/vue";
 
 const vueApp = createApp(App);
@@ -45,7 +45,20 @@ Sentry.init(
     dsn: import.meta.env.VITE_SENTRY_DSN,
     release: "capacitor-sentry-test@0.0.1",
     dist: "1",
-    integrations: [new SentryVue.BrowserTracing(), new SentryVue.Replay()],
+    debug: import.meta.env.VITE_ENABLE_DEBUG === "true",
+    integrations: [
+      new SentryVue.BrowserTracing({
+        tracePropagationTargets: [
+          "localhost",
+          // /^https:\/\/yourserver\.io\/api/,
+        ],
+        routingInstrumentation: SentryVue.vueRouterInstrumentation(router),
+      }),
+      new SentryVue.Replay(),
+    ],
+    tracesSampleRate: 1.0,
+    replaysSessionSampleRate: 1.0,
+    replaysOnErrorSampleRate: 1.0,
   },
   // Forward the init method from @sentry/vue
   SentryVue.init
@@ -57,6 +70,7 @@ vueApp.config.errorHandler = async (err, vm, info) => {
   console.error("err: ", err);
   console.error("vm: ", vm);
   console.error("info: ", info);
+
   Sentry.captureException(err, { extra: { info, vm } });
 };
 
