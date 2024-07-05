@@ -48,10 +48,10 @@ Sentry.init(
     debug: import.meta.env.VITE_ENABLE_DEBUG === "true",
     integrations: [
       new SentryVue.BrowserTracing({
-        tracePropagationTargets: [
-          "localhost",
-          // /^https:\/\/yourserver\.io\/api/,
-        ],
+        // tracePropagationTargets: [
+        //   "localhost",
+        //   // /^https:\/\/yourserver\.io\/api/,
+        // ],
         routingInstrumentation: SentryVue.vueRouterInstrumentation(router),
       }),
       new SentryVue.Replay(),
