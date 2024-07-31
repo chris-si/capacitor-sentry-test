@@ -46,7 +46,7 @@ vueApp.config.errorHandler = (err, vm, info) => {
       vm: ${vm}
       info: ${info}`);
   } catch (err) {
-    Sentry.captureException(err);
+    Sentry.captureException(err, { extra: { info, vm } });
   }
 };
 
@@ -57,7 +57,6 @@ Sentry.init(
     release: "capacitor-sentry-test@0.0.1",
     dist: "1",
     debug: import.meta.env.VITE_ENABLE_DEBUG === "true",
-    // debug: false,
     integrations: [
       SentryVue.vueIntegration(),
       new SentryVue.BrowserTracing({
