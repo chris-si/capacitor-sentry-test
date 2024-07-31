@@ -14,6 +14,7 @@
 
       <ExploreContainer name="Tab 1 page" />
 
+      <ion-button @click="captureException">Capture exception</ion-button>
       <ion-button @click="throwError">Throw error</ion-button>
     </ion-content>
   </ion-page>
@@ -29,8 +30,13 @@ import {
   IonButton,
 } from "@ionic/vue";
 import ExploreContainer from "@/components/ExploreContainer.vue";
+import * as Sentry from "@sentry/vue";
 
 function throwError() {
   throw new Error("Button click error");
+}
+
+function captureException() {
+  Sentry.captureException(new Error("Button click error"));
 }
 </script>
