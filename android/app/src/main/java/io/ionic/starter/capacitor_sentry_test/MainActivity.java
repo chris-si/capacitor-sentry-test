@@ -10,10 +10,8 @@ public class MainActivity extends BridgeActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    // Initializes the Bridge
-    this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
-      // sentry-capacitor plugin
-      add(SentryCapacitor.class);
-    }});
+
+    // Initializes the Bridge with the desired plugins
+    // this.registerPlugin(SentryCapacitor.class); // sentry is automatically registered
   }
 }
