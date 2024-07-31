@@ -39,6 +39,17 @@ import * as SentryVue from "@sentry/vue";
 
 const vueApp = createApp(App);
 
+vueApp.config.errorHandler = (err, vm, info) => {
+  try {
+    console.error("Unhandled error catched by global error handler");
+    console.error("err: ", err);
+    console.error("vm: ", vm);
+    console.error("info: ", info);
+  } catch (error) {
+    Sentry.captureException(error, { extra: { info, vm } });
+  }
+};
+
 Sentry.init(
   {
     app: vueApp,
@@ -47,12 +58,13 @@ Sentry.init(
     dist: "1",
     debug: import.meta.env.VITE_ENABLE_DEBUG === "true",
     integrations: [
+      SentryVue.vueIntegration(),
       new SentryVue.BrowserTracing({
         // tracePropagationTargets: [
         //   "localhost",
         //   // /^https:\/\/yourserver\.io\/api/,
         // ],
-        routingInstrumentation: SentryVue.vueRouterInstrumentation(router),
+        // routingInstrumentation: SentryVue.vueRouterInstrumentation(router),
       }),
       new SentryVue.Replay(),
     ],
@@ -64,15 +76,6 @@ Sentry.init(
   SentryVue.init
 );
 console.log("Sentry initialized");
-
-vueApp.config.errorHandler = async (err, vm, info) => {
-  console.error("Unhandled error catched by global error handler");
-  console.error("err: ", err);
-  console.error("vm: ", vm);
-  console.error("info: ", info);
-
-  Sentry.captureException(err, { extra: { info, vm } });
-};
 
 vueApp.use(IonicVue).use(router);
 
