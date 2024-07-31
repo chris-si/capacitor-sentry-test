@@ -41,12 +41,12 @@ const vueApp = createApp(App);
 
 vueApp.config.errorHandler = (err, vm, info) => {
   try {
-    console.error("Unhandled error catched by global error handler");
-    console.error("err: ", err);
-    console.error("vm: ", vm);
-    console.error("info: ", info);
-  } catch (error) {
-    Sentry.captureException(error, { extra: { info, vm } });
+    console.error(`Unhandled error catched by global error handler
+      err: ${err}
+      vm: ${vm}
+      info: ${info}`);
+  } catch (err) {
+    Sentry.captureException(err);
   }
 };
 
@@ -57,6 +57,7 @@ Sentry.init(
     release: "capacitor-sentry-test@0.0.1",
     dist: "1",
     debug: import.meta.env.VITE_ENABLE_DEBUG === "true",
+    // debug: false,
     integrations: [
       SentryVue.vueIntegration(),
       new SentryVue.BrowserTracing({
